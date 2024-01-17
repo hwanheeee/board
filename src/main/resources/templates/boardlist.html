@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/style.css}" rel="stylesheet"/>
+    <title>게시글 리스트 페이지</title>
+</head>
+<body>
+<section class="notice">
+    <div class="page-title">
+        <h1>자유 게시판</h1>
+        <div class="search-window">
+            <div class="search-wrap">
+                <label class="blind">공지사항 내용 검색</label>
+                <form th:action="@{/board/list}" method="get">
+                    <input type="text" name="searchKeyword">
+                    <button type="submit">검색</button>
+                </form>
+            </div>
+        </div>
+        <div class="layout">
+            <table class ="board-table">
+                <thead>
+                <tr>
+                    <td>글번호</td>
+                    <td>제목</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="board : ${list}">
+                    <td th:text ="${board.id}">1</td>
+                    <td>
+                        <a th:text ="${board.title}" th:href="@{/board/view(id=${board.id})}"></a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="numbers" >
+                <th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">
+                    <a th:if="${page != nowPage}" th:href="@{/board/list(page = ${page -1}, searchKeyword = ${param.searchKeyword})}" th:text="${page}"></a>
+                    <strong th:if="${page == nowPage}" th:text="${page}" style="color : red"></strong>
+                </th:block>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>
